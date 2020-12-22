@@ -35,7 +35,7 @@ async def neko(ctx, *args):
     if len(args) == 0:
         await ctx.send('にゃーん')
     else:
-        await ctx.send(''.join(args) + 'にゃん')
+        await ctx.send(''.join(args).replace('な', 'にゃ') + 'にゃ')
 
 
 @client.command(pass_context=True, help='Change your nickname')
