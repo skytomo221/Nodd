@@ -13,8 +13,10 @@ Nodd（ノッド）はDiscordメンバーのニックネームにナンバーを
 
 ## セットアップ
 
-1. コマンドプロンプトまたはターミナルを開きます。
-2. `python -m pip install -U "discord.py"`を実行します。
-3. `guild_id.txt`にサーバのIDを貼り付けます。
-4. `token.txt`にボットのトークンを貼り付けます。（トークンは**決して公開しないでください。**）
-5. `python main.py`を実行します。
+1. [ここ](https://qiita.com/1ntegrale9/items/aa4b373e8895273875a8#10-bot%E3%81%AB%E6%A9%9F%E8%83%BD%E3%82%92%E8%BF%BD%E5%8A%A0)を参考にHerokuにデプロイしてください。
+2. Config Varsは以下の通りに設定してください。
+
+|KEY|VALUE|
+|:-:|:-:|
+|DISCORD_NODD_BOT_TOKEN|ボットのアクセストークン|
+|DISCORD_NODD_GUILD_ID|ボットを運用するサーバID|

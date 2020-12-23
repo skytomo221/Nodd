@@ -1,16 +1,12 @@
 import discord
+import os
 import re
 from discord.ext import commands
 
-TOKEN = None
-GUILD_ID = None
+TOKEN = os.environ['DISCORD_NODD_BOT_TOKEN']
+GUILD_ID = os.environ['DISCORD_NODD_GUILD_ID']
 client = commands.Bot(command_prefix='.')
 numbers = 0
-
-with open('token.txt') as f:
-    TOKEN = f.read().strip()
-with open('guild_id.txt') as f:
-    GUILD_ID = f.read().strip()
 
 
 def get_fullwidth_next_number() -> str:
