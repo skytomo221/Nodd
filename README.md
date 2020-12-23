@@ -1,5 +1,7 @@
 # Nodd
 
+![image](https://user-images.githubusercontent.com/18415838/102994566-a6a6e880-4562-11eb-9a7b-fcd873ff54f3.png)
+
 Nodd（ノッド）はDiscordメンバーのニックネームにナンバーを振ります。
 主に日本言語製作共同研究会で使われています。
 
