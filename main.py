@@ -39,7 +39,7 @@ async def nick(ctx, raw_nick):
     if re.search(r'（Ｎｏ．[０-９]+）', raw_nick):
         await ctx.send(f'そのニックネームには変更できません。')
         return
-    nick = raw_nick + re.search(r'（Ｎｏ．[０-９]+）', ctx.author.nick).group()
+    nick = raw_nick + re.search(r'（Ｎｏ．[０-９]+）$', ctx.author.nick).group()
     await ctx.author.edit(nick=nick)
     await ctx.send(f'あなたのニックネームを {ctx.author.mention} に変更しました')
 
