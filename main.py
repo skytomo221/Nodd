@@ -1,11 +1,18 @@
-import discord
 import os
 import re
+import sys
+
+import discord
 from discord.ext import commands
+from discord_slash import SlashCommand, SlashContext
+from discord_slash.utils.manage_commands import create_option
+from asyncio.exceptions import CancelledError
+import traceback
 
 TOKEN = os.environ['DISCORD_NODD_BOT_TOKEN']
 GUILD_ID = os.environ['DISCORD_NODD_GUILD_ID']
-client = commands.Bot(command_prefix='.')
+intents = discord.Intents.all()
+client = commands.Bot(command_prefix='.', intents=intents)
 numbers = 0
 
 
@@ -13,6 +20,9 @@ def get_fullwidth_next_number() -> str:
     global numbers
     return str(numbers + 1).translate(str.maketrans(
         {chr(0x0021 + i): chr(0xFF01 + i) for i in range(94)}))
+
+
+slash_client = SlashCommand(client, sync_commands=True)
 
 
 @client.event
@@ -26,15 +36,35 @@ async def on_ready():
     print(f'numbers={numbers}')
 
 
-@client.command(help='Reply nyan')
-async def neko(ctx, *args):
-    if len(args) == 0:
+@slash_client.slash(name="neko",
+                    description='Noddくんが生きているか判定します。',
+                    options=[
+                        create_option(
+                            name="text",
+                            description="Noddくんに言わせるセリフ",
+                            option_type=3,
+                            required=False
+                        )
+                    ])
+async def neko(ctx, text=''):
+    if len(text) == 0:
         await ctx.send('にゃーん')
     else:
-        await ctx.send(''.join(args).replace('な', 'にゃ') + 'にゃ')
+        await ctx.send(''.join(text).replace('な', 'にゃ') + 'にゃ', allowed_mentions=None)
 
 
-@client.command(pass_context=True, help='Change your nickname')
+
+
+@slash_client.slash(name="nick",
+                    description='ニックネームを変更します。',
+                    options=[
+                        create_option(
+                            name="raw_nick",
+                            description="新しいニックネーム",
+                            option_type=3,
+                            required=True
+                        )
+                    ])
 async def nick(ctx, raw_nick):
     if re.search(r'（Ｎｏ．[０-９]+）', raw_nick):
         await ctx.send(f'そのニックネームには変更できません。')
