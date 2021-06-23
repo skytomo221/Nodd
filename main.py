@@ -30,7 +30,7 @@ async def on_ready():
     global numbers
     print('ログインしました')
     print(f"GUILD_ID={GUILD_ID}")
-    guild = client.get_guild(GUILD_ID)
+    guild = client.get_guild(int(GUILD_ID))
     numbers = 0 if guild == None else guild.member_count
     print(f'guild={guild}')
     print(f'numbers={numbers}')
@@ -89,16 +89,33 @@ async def nick(ctx, raw_nick):
     await ctx.send(f'あなたのニックネームを {ctx.author.mention} に変更しました')
 
 
-@client.command(help='Set member index', name='setnum')
-async def set_members(ctx, index):
+@client.event
+async def on_slash_command_error(ctx, error):
+    orig_error = getattr(error, "original", error)
+    print(''.join(traceback.TracebackException.from_exception(orig_error).format()))
+    await ctx.send(f"エラーだにゃ\n```\n{orig_error}\n```")
+
+
+@slash_client.slash(name="setnumbers",
+                    description='ナンバリングの末端を変更します。',
+                    options=[
+                        create_option(
+                            name="number",
+                            description="新しいナンバリング",
+                            option_type=4,
+                            required=True
+                        )
+                    ])
+async def set_numbers(ctx, number):
     global numbers
-    numbers = ctx.guild.member_count if index == 'auto' else int(index)
+    numbers = number
     await ctx.send(f'ナンバリングの末端を{numbers}に設定しました。\n' +
                    f'サーバに参加した方にはニックネームの後ろに（Ｎｏ．{get_fullwidth_next_number()}）が付与されます。')
 
 
-@client.command(help='Get member index', name='getnum')
-async def get_members(ctx):
+@slash_client.slash(name="getnumbers",
+                    description='ナンバリングの末端を取得します。')
+async def get_numbers(ctx):
     await ctx.send(f'サーバに参加した方にはニックネームの後ろに（Ｎｏ．{get_fullwidth_next_number()}）が付与されます。')
 
 
@@ -106,7 +123,7 @@ async def get_members(ctx):
 async def on_member_join(member):
     global numbers
     if not member.bot:
-        member.edit(nick=f'{member.nick}（Ｎｏ．{get_fullwidth_next_number()}）')
+        await member.edit(nick=f'{member.name}（Ｎｏ．{get_fullwidth_next_number()}）')
         numbers += 1
 
 client.run(TOKEN)
