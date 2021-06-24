@@ -45,7 +45,8 @@ async def on_ready():
                             option_type=3,
                             required=False
                         )
-                    ])
+                    ],
+                    guild_ids=[])
 async def neko(ctx, text=''):
     if len(text) == 0:
         await ctx.send('にゃーん')
@@ -62,7 +63,8 @@ async def neko(ctx, text=''):
                             option_type=3,
                             required=True
                         )
-                    ])
+                    ],
+                    guild_ids=[])
 async def python(ctx, command: str):
     if (len(command) - len(command.replace('_', '')) > 10):
         await ctx.send(f"そのコードはセキュリティ上の問題で実行しにゃいにゃ！")
@@ -79,7 +81,8 @@ async def python(ctx, command: str):
                             option_type=3,
                             required=True
                         )
-                    ])
+                    ],
+                    guild_ids=[])
 async def nick(ctx, raw_nick):
     if re.search(r'（Ｎｏ．[０-９]+）', raw_nick):
         await ctx.send(f'そのニックネームには変更できません。')
@@ -105,7 +108,8 @@ async def on_slash_command_error(ctx, error):
                             option_type=4,
                             required=True
                         )
-                    ])
+                    ],
+                    guild_ids=[])
 async def set_numbers(ctx, number):
     global numbers
     numbers = number
@@ -114,7 +118,8 @@ async def set_numbers(ctx, number):
 
 
 @slash_client.slash(name="getnumbers",
-                    description='ナンバリングの末端を取得します。')
+                    description='ナンバリングの末端を取得します。',
+                    guild_ids=[])
 async def get_numbers(ctx):
     await ctx.send(f'サーバに参加した方にはニックネームの後ろに（Ｎｏ．{get_fullwidth_next_number()}）が付与されます。')
 
