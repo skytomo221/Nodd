@@ -131,4 +131,24 @@ async def on_member_join(member):
         await member.edit(nick=f'{member.name}（Ｎｏ．{get_fullwidth_next_number()}）')
         numbers += 1
 
+
+@client.event
+async def on_message(message):
+    # raise the channel
+    if message.author.bot:
+        return
+    if message.channel.category_id != 790197627311357953:
+        # 790197627311357953 は「製作中の言語」カテゴリIDです。
+        return
+    guild = client.get_guild(int(GUILD_ID))
+    top_channel = guild.get_channel(879654804039819304)
+    # 879654804039819304 は「受け取りテスト」のチャンネルIDです。
+    # 「受け取りテスト」を基準に位置を決めます。
+    # text_channel.position がネット上（特にQiita）にある日本語の資料と微妙に違う挙動をするので、気をつけてください。
+    # 詳しくは以下の issue を参照のこと。
+    # https://github.com/Rapptz/discord.py/issues/2392
+    new_position = top_channel.position + 1
+    if message.channel.position > new_position:
+        await message.channel.edit(position=new_position)
+
 client.run(TOKEN)
